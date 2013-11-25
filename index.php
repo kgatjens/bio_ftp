@@ -9,6 +9,10 @@
 *	Author: Kenneth Brenes	
 *	Organization: UCR
 *	https://github.com/kgatjens/bio_ftp.git
+*
+*	git push -u origin 
+*
+*
 */
 
 define("SERVER_PATH","ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/");
