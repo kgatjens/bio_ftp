@@ -12,7 +12,7 @@
 *
 *http://www.w3resource.com/twitter-bootstrap/example-typehead.html
 */
-
+date_default_timezone_set('America/Costa_Rica');
 define("SERVER_PATH","ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/");
 define("GENES_READS","10");
 define("FILE_NAME","NC_008598.ptt"); // Temporal
@@ -24,27 +24,14 @@ class Bacteria{
 	public $bacteria_name;
 	public $file_location;
 
+	public $sequense;
+	public $genes;
+	public $species;
+
 	function __construct($bacteria_name) {
        $this->bacteria_name = $bacteria_name;
        $this->file_location = SERVER_PATH.$this->bacteria_name."/".FILE_NAME;
    	}
-
-	/*
-	* Read FTP specific file from a location
-	* return 
-	*/
-	function readFtp(){
-		$data = file($this->file_location);
-		unset($data[0]);
-		unset($data[1]);
-		unset($data[2]);
-
-		$cleanRow = array();
-		for($i=3;$i<13;$i++){ // test - limit just for ten
-			$cleanRow[] = preg_split ("/\s+/", $data[$i]);
-		}
-		return $cleanRow;
-	}
 
 	/*
    	* Build the property array for Gene Table
@@ -87,10 +74,12 @@ class Bacteria{
 	*/
    function bacteriaRead($bacteria_name = ""){
    		$bacteria_files = $this->scandir(SERVER_PATH."/".$bacteria_name);
+   		
+   		$gbsFile = $bacteria_files[4]; // Get the *.asn file to get the final SpeciesNo
 
-   		$this->parseGeneMark($bacteria_files[0]);
-   		$this->parseGeneMarkHMM($bacteria_files[1]);
-   		$this->parsePpt($bacteria_files[12]);
+   		$this->parseGeneMark($bacteria_name."/".$bacteria_files[0], $bacteria_name."/".$gbsFile);
+   		$this->parseGeneMarkHMM($bacteria_name."/".$bacteria_files[1]);
+   		$this->parsePpt($bacteria_name."/".$bacteria_files[12]);
 
    		$this->show($bacteria_files);
    }
@@ -98,11 +87,33 @@ class Bacteria{
 
     /*
    	* Parse GeneMark-2.5m
-	*
+	* @geneMark : geneMark current file name, 
+	* @aspFile 	: asp current file name	 
    	* return 
 	*/
-   function parseGeneMark($geneMark = ""){
+   function parseGeneMark($geneMark = "", $asnFile = ""){
+   		//echo SERVER_PATH.$asnFile;
+   		$data = file(SERVER_PATH.$geneMark);
 
+   		 //gbs al final del SOURCE viene el SpeciesNo
+
+			$this->show($t);
+
+   		$asp = file(SERVER_PATH.$asnFile);
+
+   		$this->show($asp);
+
+
+   		//$seq = explode("");
+
+		$sequense['SpeciesNo'] 		= $geneMark;
+   		$sequense['SequenceNo'] 	= '';
+		$sequense['SequenceID'] 	= $data[3];
+   		$sequense['SequenceDesc'] 	= $data[2];
+   		$sequense['SequenceLength'] = $data[4];
+
+
+   		$this->show($asp);
    }
 
    /*
@@ -115,13 +126,21 @@ class Bacteria{
    }
 
    /*
-   	* Parse .ptt
-	*
-   	* return 
+	* Read FTP specific file from a location
+	* return 
 	*/
-   function parsePpt($ppt = ""){
-   	
-   }
+	function parsePPT($ppt = ""){
+		$data = file(SERVER_PATH.$ppt);
+		unset($data[0]);
+		unset($data[1]);
+		unset($data[2]);
+
+		$cleanRow = array();
+		for($i=3;$i<13;$i++){ // test - limit just for ten
+			$cleanRow[] = preg_split ("/\s+/", $data[$i]);
+		}
+		return $cleanRow;
+	}
 
 
    /*
