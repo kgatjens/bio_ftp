@@ -10,7 +10,7 @@
 *
 *	git push -u origin 
 *
-*
+*http://www.w3resource.com/twitter-bootstrap/example-typehead.html
 */
 
 define("SERVER_PATH","ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/");
@@ -73,6 +73,56 @@ class Bacteria{
 
 		return $gene;
    }
+
+
+   /*
+   	* Read from a specific bacteria FTP folder, and extract data
+	*
+	*	Files to be parse: 
+	*	.GeneMark-2.5m
+	*	.ptt
+	*	.GeneMarkHMM-2.6r
+	*
+   	* return 
+	*/
+   function bacteriaRead($bacteria_name = ""){
+   		$bacteria_files = $this->scandir(SERVER_PATH."/".$bacteria_name);
+
+   		$this->parseGeneMark($bacteria_files[0]);
+   		$this->parseGeneMarkHMM($bacteria_files[1]);
+   		$this->parsePpt($bacteria_files[12]);
+
+   		$this->show($bacteria_files);
+   }
+
+
+    /*
+   	* Parse GeneMark-2.5m
+	*
+   	* return 
+	*/
+   function parseGeneMark($geneMark = ""){
+
+   }
+
+   /*
+   	* Parse GeneMarkHMM-2.6r
+	*
+   	* return 
+	*/
+   function parseGeneMarkHMM($geneMarkHMM = ""){
+   	
+   }
+
+   /*
+   	* Parse .ptt
+	*
+   	* return 
+	*/
+   function parsePpt($ppt = ""){
+   	
+   }
+
 
    /*
    * Read folder from path
