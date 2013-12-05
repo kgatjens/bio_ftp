@@ -12,7 +12,10 @@
 *
 *http://www.w3resource.com/twitter-bootstrap/example-typehead.html
 */
-date_default_timezone_set('America/Costa_Rica');
+
+require_once('lib/db.php');
+
+
 define("SERVER_PATH","ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/");
 define("GENES_READS","10");
 define("FILE_NAME","NC_008598.ptt"); // Temporal
@@ -75,8 +78,7 @@ class Bacteria{
    function bacteriaRead($bacteria_name = ""){
    		$bacteria_files = $this->scandir(SERVER_PATH."/".$bacteria_name);
    		
-   		$gbsFile = $bacteria_files[4]; // Get the *.asn file to get the final SpeciesNo
-
+   		$gbsFile = $bacteria_files[10]; // Get the *.gbs file to get the final SpeciesNo
    		$this->parseGeneMark($bacteria_name."/".$bacteria_files[0], $bacteria_name."/".$gbsFile);
    		$this->parseGeneMarkHMM($bacteria_name."/".$bacteria_files[1]);
    		$this->parsePpt($bacteria_name."/".$bacteria_files[12]);
@@ -91,29 +93,36 @@ class Bacteria{
 	* @aspFile 	: asp current file name	 
    	* return 
 	*/
-   function parseGeneMark($geneMark = "", $asnFile = ""){
+   function parseGeneMark($geneMark = "", $gbsFile = ""){
    		//echo SERVER_PATH.$asnFile;
    		$data = file(SERVER_PATH.$geneMark);
 
-   		 //gbs al final del SOURCE viene el SpeciesNo
+   		$gbs = file(SERVER_PATH.$gbsFile);
+		$needle = 'strain=';
+		$reg = '/' . $needle . '/';
+		$SpeciesNo = preg_grep($reg, $gbs);
 
-			$this->show($t);
+		//$this->show($gbs);//debug
 
-   		$asp = file(SERVER_PATH.$asnFile);
+   		foreach ($SpeciesNo as $key => $value) {//getting the SpeciesNo
+		   	$SpeciesNo = str_replace('/strain="','',$value);
+		   	$SpeciesNo = str_replace('"','',$SpeciesNo);
+		   	$SpeciesNo = str_replace(' ','',$SpeciesNo);
+   		}
 
-   		$this->show($asp);
+   		$SpeciesNo = strlen($SpeciesNo) > 10 ? "" : $SpeciesNo;// validation, to be sure is the right line with right info
 
-
-   		//$seq = explode("");
-
-		$sequense['SpeciesNo'] 		= $geneMark;
+		$sequense['SpeciesNo'] 		= $SpeciesNo;
    		$sequense['SequenceNo'] 	= '';
-		$sequense['SequenceID'] 	= $data[3];
-   		$sequense['SequenceDesc'] 	= $data[2];
-   		$sequense['SequenceLength'] = $data[4];
+		
+		$sequense['SequenceID'] 	= str_replace('Sequence file: ','',$data[3]);
+		$sequense['SequenceID'] 	= str_replace('.fna','',$sequense['SequenceID']);
 
+   		$sequense['SequenceDesc'] 	= str_replace('Sequence: ','',$data[2]);
+   		$sequense['SequenceLength'] = str_replace('Sequence length: ','',$data[4]);
 
-   		$this->show($asp);
+   		insertData('Sequences',$sequense);
+   		//$this->show($sequense);
    }
 
    /*
