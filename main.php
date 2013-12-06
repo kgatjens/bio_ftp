@@ -79,9 +79,12 @@ class Bacteria{
    		$bacteria_files = $this->scandir(SERVER_PATH."/".$bacteria_name);
    		
    		$gbsFile = $bacteria_files[10]; // Get the *.gbs file to get the final SpeciesNo
-   		$this->parseGeneMark($bacteria_name."/".$bacteria_files[0], $bacteria_name."/".$gbsFile);
-   		$this->parseGeneMarkHMM($bacteria_name."/".$bacteria_files[1]);
+   		
+   		$sequense = $this->addSequense($bacteria_name."/".$bacteria_files[0], $bacteria_name."/".$gbsFile);
+   		
    		$this->parsePpt($bacteria_name."/".$bacteria_files[12]);
+
+   		$this->addGene($bacteria_name."/".$bacteria_files[1],$bacteria_name."/".$bacteria_files[11], $sequense);
 
    		$this->show($bacteria_files);
    }
@@ -93,7 +96,7 @@ class Bacteria{
 	* @aspFile 	: asp current file name	 
    	* return 
 	*/
-   function parseGeneMark($geneMark = "", $gbsFile = ""){
+   function addSequense($geneMark = "", $gbsFile = ""){
    		//echo SERVER_PATH.$asnFile;
    		$data = file(SERVER_PATH.$geneMark);
 
@@ -121,17 +124,67 @@ class Bacteria{
    		$sequense['SequenceDesc'] 	= str_replace('Sequence: ','',$data[2]);
    		$sequense['SequenceLength'] = str_replace('Sequence length: ','',$data[4]);
 
-   		insertData('Sequences',$sequense);
+   		//$sequense['SequenceNo'] = insertData('Sequences',$sequense);//return ID
+
+   		return $sequense;
+
    		//$this->show($sequense);
    }
 
    /*
-   	* Parse GeneMarkHMM-2.6r
+   	* Parse GeneMarkHMM-2.6r and the *.ppt
 	*
    	* return 
 	*/
-   function parseGeneMarkHMM($geneMarkHMM = ""){
-   	
+   function addGene($geneMarkHMM = "", $pptFile = "", $sequense = array()){
+   		
+   		$geneMarkH = file(SERVER_PATH.$geneMarkHMM);
+
+   		//$data = $this->show($geneMarkH);
+
+		for($i=9;$i<9+GENES_READS;$i++){//clean the array
+
+			$geneMarkH[$i] = $this->clean($geneMarkH[$i]);			
+			$genesData[] = explode(" ", $geneMarkH[$i]);
+		}   
+
+		//$this->show($genesData);
+
+		foreach ($genesData as $key => $value) {
+			$gene[$key]['GeneStrand'] = $value[2];
+   			$gene[$key]['GeneStart']  = $value[3];
+   			$gene[$key]['GeneEnd']    = $value[4];
+   			$gene[$key]['GeneLength'] = $value[5];
+		}		
+
+		$genePpt = file(SERVER_PATH.$pptFile);
+
+		for($i=3;$i<3+GENES_READS;$i++){//clean the array
+
+			$genePpt[$i] = $this->changeBlanks($genePpt[$i]);			
+			$genesData2[] = explode("*", $genePpt[$i]);
+		}  
+
+
+		//Adding extra fields
+   		$gene['GeneName'] 		= $genesData2[4];
+   		$gene['GeneSynonym'] 	= $genesData2[4];
+   		$gene['GeneCode'] 		= "";
+   		$gene['GeneCOG'] 		= $genesData2[7];
+   		$gene['GeneProduct'] 	= $genesData2[8];
+
+   		//$this->show($sequense);
+
+   		$gene['SpeciesNo'] 	= $sequense['SpeciesNo'];
+   		$gene['SequenceNo'] = $sequense['SequenceNo'];
+   		
+   		$gene['GenePID'] = "";//*
+   		$gene['id'] = "";//*
+   		$gene['GeneNo'] = "";//*
+   		$gene['GeneGC'] = "";//*
+   		
+   		$gene['GeneKey'] = "";
+
    }
 
    /*
@@ -148,6 +201,9 @@ class Bacteria{
 		for($i=3;$i<13;$i++){ // test - limit just for ten
 			$cleanRow[] = preg_split ("/\s+/", $data[$i]);
 		}
+
+		$this->show($cleanRow);
+		
 		return $cleanRow;
 	}
 
@@ -169,6 +225,42 @@ class Bacteria{
       $foldersQuantity = count(scandir($path));
       return $foldersQuantity;
    }
+
+   /*
+   * Delete spaces
+   * return 
+   */
+   function clean($array = array()){
+		$array = str_replace('           ',' ',$array);
+		$array = str_replace('          ',' ',$array);
+		$array = str_replace('         ',' ',$array);
+		$array = str_replace('        ',' ',$array);
+		$array = str_replace('       ',' ',$array);
+		$array = str_replace('      ',' ',$array);
+		$array = str_replace('     ',' ',$array);
+		$array = str_replace('    ',' ',$array);
+		$array = str_replace('   ',' ',$array);
+      return $array;
+   }
+
+   /*
+   * Delete spaces
+   * return 
+   */
+   function changeBlanks($array = array()){
+		$array = str_replace('           ','*',$array);
+		$array = str_replace('          ','*',$array);
+		$array = str_replace('         ','*',$array);
+		$array = str_replace('        ','*',$array);
+		$array = str_replace('       ','*',$array);
+		$array = str_replace('      ','*',$array);
+		$array = str_replace('     ','*',$array);
+		$array = str_replace('    ','*',$array);
+		$array = str_replace('   ','*',$array);
+		$array = str_replace('	','*',$array);
+      return $array;
+   }
+
 
 	/*
 	* 		- HELPER
