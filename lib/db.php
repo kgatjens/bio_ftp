@@ -21,14 +21,14 @@ $_connect = null;
 /**
  * Retorna un recurso de conexión a la base de datos.
  *
- * Si la conexión ya fue hecha, la retorna, sino crea una.
  *
  * @return mysqli
  */
 function getConnection() {
-    global $_connect, $confiDB;
+    //echo DB_NAME;
+     //return mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    return new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-    return $_connect;
 }
 
 /**
@@ -37,34 +37,49 @@ function getConnection() {
  * @return int
  */
 function insertData($table, $data) {
-    
+    $con = getConnection();
+/*
+    // Get the columns
+    $cols = array_keys($data);
+    $numCols = count($cols);
+    $cols = implode(',', $cols);
+    $vals = implode(',', array_fill(0, $numCols, '?'));
+    $stringVals = implode('', array_fill(0, $numCols, 's'));
 
-    //$conn = getConnection();
+    $sql = "INSERT INTO {$table} ({$cols}) VALUES ({$vals})";
+    $sth = $con->prepare($sql);
 
-    $sql="INSERT INTO `".$table."`";
-    $columns = "(";
-        foreach ($data as $key => $value) {
-            $columns = $columns."`".$key."`,";
-        }
-    
-    $columns=substr($columns, 0,-1);
-    $columns=$columns.")";
-    $sql = $sql.$columns;
+    $data = array($stringVals) + $data;
+    call_user_func(array($sth, 'bind_param'), $data);
 
-    $values = "VALUES (";
-        foreach ($data as $key => $value) {
-            $values = $values."'".$value."',";
-        }
+    $res = $sth->execute();
 
-    $values=substr($values, 0,-1);
-    $values=$values.")";
-    $sql = $sql.$values.";";
-    echo $sql;
+    var_dump($sql, $res, $data, $sth->insert_id);
     exit;
-    
+    return $sth->insert_id;
+*/
 
-    $data = mysqli_query($conn, $sql);
-    return mysqli_fetch_assoc($datos);
+
+    if (mysqli_connect_errno($con))
+    {
+        echo mysqli_connect_error();
+    }
+    
+    $keys = array_keys($data);
+    $columns = implode(',', $keys);
+    
+    $values = array();
+    foreach ($data as $v) {
+        $v = $con->escape_string($v);
+        $values[] = "'{$v}'";
+    }
+
+    $values = implode(',', $values);
+
+    $sql = "INSERT INTO `{$table}` ({$columns}) VALUES ({$values})";
+   
+    $result = $con->query($sql);
+    return $con->insert_id;
 }
 
 

@@ -124,7 +124,9 @@ class Bacteria{
    		$sequense['SequenceDesc'] 	= str_replace('Sequence: ','',$data[2]);
    		$sequense['SequenceLength'] = str_replace('Sequence length: ','',$data[4]);
 
-   		//$sequense['SequenceNo'] = insertData('Sequences',$sequense);//return ID
+   		$sequense['SequenceNo'] = insertData('Sequences',$sequense);//return ID
+
+   		$this->show($sequense);
 
    		return $sequense;
 
@@ -203,7 +205,7 @@ class Bacteria{
 		}
 
 		$this->show($cleanRow);
-		
+
 		return $cleanRow;
 	}
 

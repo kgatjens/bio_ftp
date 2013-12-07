@@ -1,6 +1,6 @@
 <?php
 /**
- * Cofi File
+ * Cofig File
  *
  * Contains:
  *  - Date
@@ -12,10 +12,17 @@
 date_default_timezone_set('America/Costa_Rica');
 
 // Config Data Base info
-$confiDB = array(
-    'host'    => '',
-    'user' => '',
-    'pass'   => '',
-    'schema' => '',
-);
+
+define("DB_NAME","bio");
+define("DB_HOST","127.0.0.1");
+define("DB_USER","root");
+define("DB_PASS","");
+
+/*
+$configDB = array(
+    'host'    	=> '127.0.0.1',
+    'user' 		=> 'root',
+    'pass'   	=> '',
+    'schema' 	=> 'bio',
+);*/
 
