@@ -78,15 +78,17 @@ class Bacteria{
    function bacteriaRead($bacteria_name = ""){
    		$bacteria_files = $this->scandir(SERVER_PATH."/".$bacteria_name);
    		
-   		$gbsFile = $bacteria_files[10]; // Get the *.gbs file to get the final SpeciesNo
+   		$gbsFile 	= $bacteria_files[9]; // Get the *.gbs file to get the final SpeciesNo
    		
-   		$sequense = $this->addSequense($bacteria_name."/".$bacteria_files[0], $bacteria_name."/".$gbsFile);
+   		$data['sequense'] 	= $this->addSequense($bacteria_name."/".$bacteria_files[0], $bacteria_name."/".$gbsFile);
    		
-   		$this->parsePpt($bacteria_name."/".$bacteria_files[12]);
+   		$data['genes'] 		= $this->addGene($bacteria_name."/".$bacteria_files[1],$bacteria_name."/".$bacteria_files[11], $sequense, $genes);
 
-   		$this->addGene($bacteria_name."/".$bacteria_files[1],$bacteria_name."/".$bacteria_files[11], $sequense);
+   		$data['species'] 	= $this->addSpecie($bacteria_name."/".$gbsFile, $sequense['SpeciesNo']);
 
-   		$this->show($bacteria_files);
+   		//$this->show($data);
+
+   		return $data;
    }
 
 
@@ -97,23 +99,21 @@ class Bacteria{
    	* return 
 	*/
    function addSequense($geneMark = "", $gbsFile = ""){
-   		//echo SERVER_PATH.$asnFile;
    		$data = file(SERVER_PATH.$geneMark);
 
    		$gbs = file(SERVER_PATH.$gbsFile);
+
 		$needle = 'strain=';
 		$reg = '/' . $needle . '/';
 		$SpeciesNo = preg_grep($reg, $gbs);
-
-		//$this->show($gbs);//debug
+		//$this->show($SpeciesNo);
+		//Bacillus_thuringiensis_Al_Hakam_uid58795
 
    		foreach ($SpeciesNo as $key => $value) {//getting the SpeciesNo
-		   	$SpeciesNo = str_replace('/strain="','',$value);
-		   	$SpeciesNo = str_replace('"','',$SpeciesNo);
-		   	$SpeciesNo = str_replace(' ','',$SpeciesNo);
+			$SpeciesNo = preg_replace('/.*strain=/', '', $value);		  
    		}
 
-   		$SpeciesNo = strlen($SpeciesNo) > 10 ? "" : $SpeciesNo;// validation, to be sure is the right line with right info
+   		$SpeciesNo = strlen($SpeciesNo) > 25 ? "" : $SpeciesNo;// validation, to be sure is the right line with right info
 
 		$sequense['SpeciesNo'] 		= $SpeciesNo;
    		$sequense['SequenceNo'] 	= '';
@@ -125,12 +125,7 @@ class Bacteria{
    		$sequense['SequenceLength'] = str_replace('Sequence length: ','',$data[4]);
 
    		$sequense['SequenceNo'] = insertData('Sequences',$sequense);//return ID
-
-   		$this->show($sequense);
-
-   		return $sequense;
-
-   		//$this->show($sequense);
+   		return $sequense;   		
    }
 
    /*
@@ -141,8 +136,6 @@ class Bacteria{
    function addGene($geneMarkHMM = "", $pptFile = "", $sequense = array()){
    		
    		$geneMarkH = file(SERVER_PATH.$geneMarkHMM);
-
-   		//$data = $this->show($geneMarkH);
 
 		for($i=9;$i<9+GENES_READS;$i++){//clean the array
 
@@ -159,35 +152,86 @@ class Bacteria{
    			$gene[$key]['GeneLength'] = $value[5];
 		}		
 
-		$genePpt = file(SERVER_PATH.$pptFile);
 
-		for($i=3;$i<3+GENES_READS;$i++){//clean the array
+		$genePpt = file(SERVER_PATH.$pptFile);
+   		//$this->show($gene);
+
+		for($i=0;$i<3+GENES_READS;$i++){//clean the array
 
 			$genePpt[$i] = $this->changeBlanks($genePpt[$i]);			
 			$genesData2[] = explode("*", $genePpt[$i]);
 		}  
 
+		unset($genesData2[0]);
+		unset($genesData2[1]);
+		unset($genesData2[2]);
 
-		//Adding extra fields
-   		$gene['GeneName'] 		= $genesData2[4];
-   		$gene['GeneSynonym'] 	= $genesData2[4];
-   		$gene['GeneCode'] 		= "";
-   		$gene['GeneCOG'] 		= $genesData2[7];
-   		$gene['GeneProduct'] 	= $genesData2[8];
+		for($i=0;$i<10;$i++){//fill some gene info
+			$gene[$i]['GeneName'] 		= $genesData2[$i+3][4];
+	   		$gene[$i]['GeneSynonym'] 	= $genesData2[$i+3][4];
+	   		$gene[$i]['GeneCode'] 		= "";
+	   		$gene[$i]['GeneCOG'] 		= $genesData2[$i+3][7];
+	   		$gene[$i]['GeneProduct'] 	= $genesData2[$i+3][8];
+	   		$gene[$i]['SpeciesNo'] 		= $sequense['SpeciesNo'];
+	   		$gene[$i]['SequenceNo'] 	= $sequense['SequenceNo'];
+	   		$gene[$i]['GeneNo'] 		= $i;//fmor 1-10, we are saving just 10 genes per sequence
 
-   		//$this->show($sequense);
+			$gene[$i]['GenePID'] = "";
+			$gene[$i]['id'] = "";
+			$gene[$i]['GeneGC'] = "";
+			$gene[$i]['GeneKey'] = "";
+			//$this->show($gene[$i]);
+			$gene[$i]['id'] = insertData('Genes',$gene[$i]);//return ID
+	   		
+		}
 
-   		$gene['SpeciesNo'] 	= $sequense['SpeciesNo'];
-   		$gene['SequenceNo'] = $sequense['SequenceNo'];
-   		
+		/*   		
+   		// this info is needed
    		$gene['GenePID'] = "";//*
    		$gene['id'] = "";//*
-   		$gene['GeneNo'] = "";//*
-   		$gene['GeneGC'] = "";//*
-   		
+   		$gene['GeneGC'] = "";//*   		
    		$gene['GeneKey'] = "";
-
+   		*/
+   		return $gene;   	
    }
+
+   /*
+	* Read FTP specific file from a location
+	* return 
+	*/
+	function addSpecie($gbsFile = "", $specieNo = ""){
+		
+		$gbs = file(SERVER_PATH.$gbsFile);
+
+		//$this->show($gbs);
+
+		$needle = 'DBLINK      Project:';
+		$reg = '/' . $needle . '/';
+		$SpeciesUid = preg_grep($reg, $gbs);
+		//Bacillus_thuringiensis_Al_Hakam_uid58795
+
+   		foreach ($SpeciesUid as $key => $value) {//getting the SpeciesUid
+			$SpeciesUid = preg_replace('/.* Project:/', '', $value);		  
+   		}
+
+		$needle = ' ORGANISM';
+		$reg = '/' . $needle . '/';
+		$SpeciesID = preg_grep($reg, $gbs);
+
+   		foreach ($SpeciesID as $key => $value) {//getting the SpeciesID
+			$SpeciesID = preg_replace('/.* ORGANISM  /', '', $value);		  
+   		}
+		//$this->show($SpeciesID);
+
+		$specie['SpeciesNo'] 	= $specieNo;
+		$specie['SpeciesID'] 	= $SpeciesID;
+		$specie['SpeciesUid'] 	= $SpeciesUid;
+		$specie['Finished'] 	= "";
+
+		$specie['SequenceNo'] = insertData('Species',$specie);//return ID
+
+		return $specie;
+	}
 
    /*
 	* Read FTP specific file from a location
@@ -195,6 +239,7 @@ class Bacteria{
 	*/
 	function parsePPT($ppt = ""){
 		$data = file(SERVER_PATH.$ppt);
+
 		unset($data[0]);
 		unset($data[1]);
 		unset($data[2]);
@@ -203,8 +248,6 @@ class Bacteria{
 		for($i=3;$i<13;$i++){ // test - limit just for ten
 			$cleanRow[] = preg_split ("/\s+/", $data[$i]);
 		}
-
-		$this->show($cleanRow);
 
 		return $cleanRow;
 	}

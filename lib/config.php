@@ -10,6 +10,7 @@
 
 // http://www.php.net/manual/en/timezones.php
 date_default_timezone_set('America/Costa_Rica');
+error_reporting(E_ALL);//debug
 
 // Config Data Base info
 

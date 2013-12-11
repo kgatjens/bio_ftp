@@ -1,0 +1,238 @@
+
+    [sequense] => Array
+        (
+            [SpeciesNo] => "Al Hakam"
+
+            [SequenceNo] => 101
+            [SequenceID] => NC_008598
+
+            [SequenceDesc] => gi|118445179|ref|NC_008598.1| Bacillus thuringiensis str. Al Hakam plasmid pALH1, complete sequence
+
+            [SequenceLength] => 55939
+
+        )
+
+    [genes] => Array
+        (
+            [0] => Array
+                (
+                    [GeneStrand] => -
+                    [GeneStart] => <1
+                    [GeneEnd] => 687
+                    [GeneLength] => 687
+                    [GeneName] => terS
+                    [GeneSynonym] => terS
+                    [GeneCode] => 
+                    [GeneCOG] => COG3728L
+                    [GeneProduct] => phage terminase small subunit
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 0
+                    [GenePID] => 
+                    [id] => 354
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [1] => Array
+                (
+                    [GeneStrand] => -
+                    [GeneStart] => 665
+                    [GeneEnd] => 1594
+                    [GeneLength] => 930
+                    [GeneName] => uvrC
+                    [GeneSynonym] => uvrC
+                    [GeneCode] => 
+                    [GeneCOG] => COG0322L
+                    [GeneProduct] => excinuclease ABC subunit C
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 1
+                    [GenePID] => 
+                    [id] => 355
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [2] => Array
+                (
+                    [GeneStrand] => +
+                    [GeneStart] => 1919
+                    [GeneEnd] => 2098
+                    [GeneLength] => 180
+                    [GeneName] => res
+                    [GeneSynonym] => res
+                    [GeneCode] => 
+                    [GeneCOG] => COG1961L
+                    [GeneProduct] => resolvase
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 2
+                    [GenePID] => 
+                    [id] => 356
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [3] => Array
+                (
+                    [GeneStrand] => -
+                    [GeneStart] => 2151
+                    [GeneEnd] => 2975
+                    [GeneLength] => 825
+                    [GeneName] => -
+                    [GeneSynonym] => -
+                    [GeneCode] => 
+                    [GeneCOG] => -
+                    [GeneProduct] => hypothetical protein
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 3
+                    [GenePID] => 
+                    [id] => 357
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [4] => Array
+                (
+                    [GeneStrand] => -
+                    [GeneStart] => 2988
+                    [GeneEnd] => 3572
+                    [GeneLength] => 585
+                    [GeneName] => -
+                    [GeneSynonym] => -
+                    [GeneCode] => 
+                    [GeneCOG] => -
+                    [GeneProduct] => hypothetical protein
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 4
+                    [GenePID] => 
+                    [id] => 358
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [5] => Array
+                (
+                    [GeneStrand] => +
+                    [GeneStart] => 3833
+                    [GeneEnd] => 3958
+                    [GeneLength] => 126
+                    [GeneName] => -
+                    [GeneSynonym] => -
+                    [GeneCode] => 
+                    [GeneCOG] => -
+                    [GeneProduct] => hypothetical protein
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 5
+                    [GenePID] => 
+                    [id] => 359
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [6] => Array
+                (
+                    [GeneStrand] => -
+                    [GeneStart] => 3951
+                    [GeneEnd] => 4025
+                    [GeneLength] => 75
+                    [GeneName] => recU
+                    [GeneSynonym] => recU
+                    [GeneCode] => 
+                    [GeneCOG] => COG3331R
+                    [GeneProduct] => recombination protein U (penicillin-binding protein-related factor A)
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 6
+                    [GenePID] => 
+                    [id] => 360
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [7] => Array
+                (
+                    [GeneStrand] => -
+                    [GeneStart] => 4075
+                    [GeneEnd] => 4305
+                    [GeneLength] => 231
+                    [GeneName] => -
+                    [GeneSynonym] => -
+                    [GeneCode] => 
+                    [GeneCOG] => -
+                    [GeneProduct] => hypothetical protein
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 7
+                    [GenePID] => 
+                    [id] => 361
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [8] => Array
+                (
+                    [GeneStrand] => -
+                    [GeneStart] => 4394
+                    [GeneEnd] => 4720
+                    [GeneLength] => 327
+                    [GeneName] => -
+                    [GeneSynonym] => -
+                    [GeneCode] => 
+                    [GeneCOG] => -
+                    [GeneProduct] => hypothetical protein
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 8
+                    [GenePID] => 
+                    [id] => 362
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+            [9] => Array
+                (
+                    [GeneStrand] => -
+                    [GeneStart] => 5796
+                    [GeneEnd] => 6182
+                    [GeneLength] => 387
+                    [GeneName] => -
+                    [GeneSynonym] => -
+                    [GeneCode] => 
+                    [GeneCOG] => -
+                    [GeneProduct] => hypothetical protein
+
+                    [SpeciesNo] => 
+                    [SequenceNo] => 
+                    [GeneNo] => 9
+                    [GenePID] => 
+                    [id] => 363
+                    [GeneGC] => 
+                    [GeneKey] => 
+                )
+
+        )
+
+    [species] => Array
+        (
+            [SpeciesNo] => 
+            [SpeciesID] => Bacillus thuringiensis str. Al Hakam
+
+            [SpeciesUid] =>  58795
+
+            [Finished] => 
+            [SequenceNo] => 0
+        )

@@ -13,8 +13,8 @@
   	<div class="container">
 
       <div class="page-header">
-        <h1>NCBI Local</h1>
-        <p class="lead">Busque la especie que desee agregar localmente</p>
+        <img  src="img/logo.jpg">
+        <p class="lead text-primary">Busque la especie que desee agregar localmente</p>
       </div>
 <?php
 //

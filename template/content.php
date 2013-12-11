@@ -15,7 +15,7 @@
 
 		</div>
 	<button type="submit" class="btn btn-primary btn-lg">Guardar localmente</button>
-	<a href="#" class="btn btn-info btn-lg" role="button">Ver datos</a>
+	<!--<a href="#" class="btn btn-info btn-lg" role="button">Ver datos</a>-->
 
 	</fieldset>
 </form>

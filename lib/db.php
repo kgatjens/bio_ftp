@@ -38,6 +38,31 @@ function getConnection() {
  */
 function insertData($table, $data) {
     $con = getConnection();
+
+    if (mysqli_connect_errno($con))
+    {
+        echo mysqli_connect_error();
+    }
+    
+    $keys = array_keys($data);
+    $columns = implode(',', $keys);
+    
+    $values = array();
+    foreach ($data as $v) {
+        $v = $con->escape_string($v);
+        $values[] = "'{$v}'";
+    }
+
+    $values = implode(',', $values);
+
+     $sql = "INSERT INTO `{$table}` ({$columns}) VALUES ({$values})";    
+
+    //echo $sql."<br>";
+    $sql = str_replace('\"','',$sql);
+    $result = $con->query(str_replace('\n','',$sql));
+    return $con->insert_id;
+}
+
 /*
     // Get the columns
     $cols = array_keys($data);
@@ -58,28 +83,4 @@ function insertData($table, $data) {
     exit;
     return $sth->insert_id;
 */
-
-
-    if (mysqli_connect_errno($con))
-    {
-        echo mysqli_connect_error();
-    }
-    
-    $keys = array_keys($data);
-    $columns = implode(',', $keys);
-    
-    $values = array();
-    foreach ($data as $v) {
-        $v = $con->escape_string($v);
-        $values[] = "'{$v}'";
-    }
-
-    $values = implode(',', $values);
-
-    $sql = "INSERT INTO `{$table}` ({$columns}) VALUES ({$values})";
-   
-    $result = $con->query($sql);
-    return $con->insert_id;
-}
-
 
