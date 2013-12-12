@@ -1,8 +1,7 @@
 <?php
 /**
  * Data Base Library
- *
- * 
+ * @Kenneth Brenes
  * 
  */
 
@@ -19,8 +18,7 @@ require_once 'config.php';
 $_connect = null;
 
 /**
- * Retorna un recurso de conexión a la base de datos.
- *
+ * Return connection object
  *
  * @return mysqli
  */

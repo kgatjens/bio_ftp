@@ -82,7 +82,7 @@ class Bacteria{
    		
    		$data['sequense'] 	= $this->addSequense($bacteria_name."/".$bacteria_files[0], $bacteria_name."/".$gbsFile);
    		
-   		$data['genes'] 		= $this->addGene($bacteria_name."/".$bacteria_files[1],$bacteria_name."/".$bacteria_files[11], $sequense, $genes);
+   		$data['genes'] 		= $this->addGene($bacteria_name."/".$bacteria_files[1],$bacteria_name."/".$bacteria_files[11], $data['sequense']);
 
    		$data['species'] 	= $this->addSpecie($bacteria_name."/".$gbsFile, $sequense['SpeciesNo']);
 
