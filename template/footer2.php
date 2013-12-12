@@ -5,7 +5,7 @@
 ?>
 </div> <!-- /container -->
 
-<div id="footer" style="position:fixed;">
+<div id="footer" style="position:relative;">
 	<div class="container">
         <p class="muted credit">Beta, Buscador Bacterias NCBI <a href="#">Kenneth Brenes</a> 2013 </a>.</p>
     </div>

@@ -1,7 +1,5 @@
 <?php
 //species, sequences, genes
-//require_once '../lib/base_datos.php';
-
 include('main.php');
 include('template/header.php');
 
@@ -9,7 +7,6 @@ include('template/header.php');
 $data = $bacteria->bacteriaRead($_POST['bacteria']);
 
 include('template/table.php');
-
-include('template/footer.php');
+include('template/footer2.php');
 
 ?>

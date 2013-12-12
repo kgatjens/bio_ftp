@@ -2,7 +2,8 @@
 /**
  * Data Base Library
  * @Kenneth Brenes
- * 
+ *  Organization: UCR
+ *   https://github.com/kgatjens/bio_ftp.git
  */
 
 /**
@@ -57,6 +58,7 @@ function insertData($table, $data) {
 
     //echo $sql."<br>";
     $sql = str_replace('\"','',$sql);
+    $sql = str_replace('"','',$sql);
     $result = $con->query(str_replace('\n','',$sql));
     return $con->insert_id;
 }

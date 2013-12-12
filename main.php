@@ -78,10 +78,11 @@ class Bacteria{
    function bacteriaRead($bacteria_name = ""){
    		$bacteria_files = $this->scandir(SERVER_PATH."/".$bacteria_name);
    		
-   		$gbsFile 	= $bacteria_files[9]; // Get the *.gbs file to get the final SpeciesNo
+
+   		$gbsFile 	= $bacteria_files[10]; // Get the *.gbs file to get the final SpeciesNo
    		
    		$data['sequense'] 	= $this->addSequense($bacteria_name."/".$bacteria_files[0], $bacteria_name."/".$gbsFile);
-   		
+
    		$data['genes'] 		= $this->addGene($bacteria_name."/".$bacteria_files[1],$bacteria_name."/".$bacteria_files[11], $data['sequense']);
 
    		$data['species'] 	= $this->addSpecie($bacteria_name."/".$gbsFile, $sequense['SpeciesNo']);
@@ -106,9 +107,7 @@ class Bacteria{
 		$needle = 'strain=';
 		$reg = '/' . $needle . '/';
 		$SpeciesNo = preg_grep($reg, $gbs);
-		//$this->show($SpeciesNo);
-		//Bacillus_thuringiensis_Al_Hakam_uid58795
-
+	
    		foreach ($SpeciesNo as $key => $value) {//getting the SpeciesNo
 			$SpeciesNo = preg_replace('/.*strain=/', '', $value);		  
    		}
@@ -143,8 +142,6 @@ class Bacteria{
 			$genesData[] = explode(" ", $geneMarkH[$i]);
 		}   
 
-		//$this->show($genesData);
-
 		foreach ($genesData as $key => $value) {
 			$gene[$key]['GeneStrand'] = $value[2];
    			$gene[$key]['GeneStart']  = $value[3];
@@ -154,7 +151,6 @@ class Bacteria{
 
 
 		$genePpt = file(SERVER_PATH.$pptFile);
-   		//$this->show($gene);
 
 		for($i=0;$i<3+GENES_READS;$i++){//clean the array
 
@@ -180,18 +176,10 @@ class Bacteria{
 			$gene[$i]['id'] = "";
 			$gene[$i]['GeneGC'] = "";
 			$gene[$i]['GeneKey'] = "";
-			//$this->show($gene[$i]);
 			$gene[$i]['id'] = insertData('Genes',$gene[$i]);//return ID
 	   		
 		}
 
-		/*   		
-   		// this info is needed
-   		$gene['GenePID'] = "";//*
-   		$gene['id'] = "";//*
-   		$gene['GeneGC'] = "";//*   		
-   		$gene['GeneKey'] = "";
-   		*/
    		return $gene;   	
    }
 
@@ -306,7 +294,6 @@ class Bacteria{
       return $array;
    }
 
-
 	/*
 	* 		- HELPER
 	*  
@@ -318,17 +305,8 @@ class Bacteria{
 		echo "</pre>";
 		exit;
 	}
-
-
-
 }
 
 $bacteria = new Bacteria("Bacillus_thuringiensis_Al_Hakam_uid58795");
-//$bacteria->geneCreation($bacteria->readFtp());
-//$bacteria->show($bacteria->scanDir());
-//echo $bacteria->countDir();
-
-//exit;
-
 
 ?>
